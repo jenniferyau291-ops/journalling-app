@@ -5,13 +5,14 @@ import { FONT, FONT_TITLE } from "../../constants/typography";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: COLOURS.background,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: COLOURS.outline, // Android-style page border
-     justifyContent: "flex-start", // aligns to top
-  },
+  backgroundColor: COLOURS.background,
+  padding: 16,
+  borderWidth: 1,
+  borderColor: COLOURS.outline,
+  justifyContent: "flex-start",
+  paddingBottom: 40,
+},
+
 
   card: {
     backgroundColor: COLOURS.cardBackground,
@@ -121,25 +122,17 @@ const styles = StyleSheet.create({
     fontFamily: FONT,
   },
 
-  ratingContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    backgroundColor: COLOURS.inputBackground,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: COLOURS.border,
-    padding: 8,
-    ...Platform.select({
-      android: {
-        elevation: 1,
-      },
-    }),
-  },
+  moodContainer: {
+  flexDirection: "row",
+ justifyContent: "space-around",
+  alignItems: "center",
+  marginTop: 10,
+},
 
-  starButton: {
-    padding: 8,
-  },
+moodButton: {
+  padding: 6,
+},
+
 
   imagePicker: {
     width: "100%",

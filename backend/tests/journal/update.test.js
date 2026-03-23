@@ -15,7 +15,8 @@ describe("PATCH /api/journals/:id", () => {
       .post("/api/journals")
       .set("Authorization", `Bearer ${token}`)
       .send({
-        content: "Original content",
+  title: "My title",
+  content: "Original content",
         mood: { emoji: "🙂", value: 3 },
       });
 
