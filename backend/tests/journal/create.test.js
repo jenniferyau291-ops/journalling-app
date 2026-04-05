@@ -15,9 +15,11 @@ describe("POST /api/journals", () => {
     .post("/api/journals")
     .set("Authorization", `Bearer ${token}`)
     .send({
-      content: "My first journal",
-      mood: { emoji: "🙂", value: 4 },
-    });
+  title: "My title",
+  content: "My first journal",
+  mood: { emoji: "🙂", value: 4 },
+});
+
 
   expect(res.statusCode).toBe(201);
   expect(res.body.message).toBe("Journal entry created successfully");
@@ -29,9 +31,11 @@ it("fails with empty content", async () => {
     .post("/api/journals")
     .set("Authorization", `Bearer ${token}`)
     .send({
-      content: "",
-      mood: { emoji: "🙂", value: 4 },
-    });
+  title: "Test title",
+  content: "",
+  mood: { emoji: "🙂", value: 4 },
+});
+
 
   expect(res.statusCode).toBe(400);
   expect(res.body.message).toBe("Journal content is required");
@@ -42,6 +46,7 @@ it("fails with invalid mood value", async () => {
     .post("/api/journals")
     .set("Authorization", `Bearer ${token}`)
     .send({
+       title: "Test title",
       content: "Bad mood",
       mood: { emoji: "🙂", value: 10 },
     });

@@ -6,7 +6,11 @@ import mongoose from "mongoose";
  */
 export const createJournal = async (req, res) => {
   try {
-    const { content, mood } = req.body;
+    const { title, content, mood } = req.body;
+
+     if (!title || !title.trim()) {
+      return res.status(400).json({ message: "Journal title is required" });
+    }
 
     if (!content) {
       return res.status(400).json({ message: "Journal content is required" });
@@ -23,6 +27,7 @@ export const createJournal = async (req, res) => {
     }
 
     const newJournal = new Journal({
+      title,
       content,
       mood: {
         emoji: mood.emoji,
@@ -102,7 +107,7 @@ export const deleteJournal = async (req, res) => {
  */
 export const updateJournal = async (req, res) => {
   try {
-    const { content, mood } = req.body;
+    const { title, content, mood } = req.body;
 
     // ✅ Check if ID is a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -116,6 +121,12 @@ export const updateJournal = async (req, res) => {
     if (journal.user.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: "Forbidden" });
     }
+    if (title !== undefined) {
+  if (!title.trim()) {
+    return res.status(400).json({ message: "Journal title cannot be empty" });
+  }
+  journal.title = title;
+}
 
     if (content !== undefined) {
       if (!content.trim()) {
@@ -148,4 +159,34 @@ export const updateJournal = async (req, res) => {
     console.error("Error updating journal:", error);
     res.status(500).json({ message: "Internal server error" });
   }
+  
 };
+/**
+ * GET single journal
+ */
+export const getJournalById = async (req, res) => {
+  try {
+    // ✅ Validate ID
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Journal not found" });
+    }
+
+    const journal = await Journal.findById(req.params.id)
+      .populate("user", "username");
+
+    if (!journal) {
+      return res.status(404).json({ message: "Journal not found" });
+    }
+
+    // 🔒 Make sure user owns this journal
+    if (journal.user._id.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    res.status(200).json({ journal });
+  } catch (error) {
+    console.log("Error getting journal", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+

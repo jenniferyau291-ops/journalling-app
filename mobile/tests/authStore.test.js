@@ -1,4 +1,4 @@
-import { useAuthStore } from "../store/AuthStore";
+import { useAuthStore } from "../store/authStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 describe("AuthStore logout", () => {

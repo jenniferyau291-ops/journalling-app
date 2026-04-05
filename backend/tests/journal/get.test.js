@@ -16,9 +16,11 @@ describe("GET /api/journals", () => {
       .post("/api/journals")
       .set("Authorization", `Bearer ${token}`)
       .send({
-        content: "Entry 1",
-        mood: { emoji: "🙂", value: 5 },
-      });
+  title: "My title",
+  content: "My first journal",
+  mood: { emoji: "🙂", value: 4 },
+});
+
 
     // Fetch journals
     const res = await request(app)
