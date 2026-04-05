@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View } from 'react-native'
+
 import styles from "../../assets/styles/profile.style";
 import ProfileHeader from "../../components/ProfileHeader";
 import LogoutButton from "../../components/LogOutButton";

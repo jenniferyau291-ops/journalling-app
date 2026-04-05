@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler/jestSetup';
 
-// Mock Reanimated
+// Mock Reanimated so tests dont break
 jest.mock('react-native-reanimated', () => require('react-native-reanimated/mock'));
 
 // Mock AsyncStorage
@@ -13,10 +13,10 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   removeItemAsync: jest.fn(),
 }));
 
-// Mock Expo modules WITHOUT importing them
+// Mock Expo modules 
 jest.mock('expo-constants', () => ({ manifest: {}, appOwnership: 'standalone' }));
 
-// Do NOT import expo-secure-store — just mock it like this
+// mocks secure storage
 jest.mock('expo-secure-store', () => ({
   getItemAsync: jest.fn(),
   setItemAsync: jest.fn(),

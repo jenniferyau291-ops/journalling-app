@@ -3,12 +3,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 describe("AuthStore logout", () => {
   beforeEach(() => {
-    // Reset store state and mocks
+    // set fake log in 
     useAuthStore.setState({ token: "testToken", user: { username: "testuser" } });
+    //clears history to not impact on current test 
     jest.clearAllMocks();
   });
 
-  it("should clear token and user from state and AsyncStorage", async () => {
+  it("should remove token and user from state and AsyncStorage", async () => {
     // Call logout
     await useAuthStore.getState().logout();
 

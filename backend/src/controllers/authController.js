@@ -1,13 +1,13 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
-
+//create token method 
 const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "15d" });
 };
 
 
-
+// register 
 export const register = async (req, res) => {
      try {
     const { email, username, password } = req.body;
@@ -43,7 +43,7 @@ export const register = async (req, res) => {
 
      await user.save();
 
-
+     // create token after registering
   const token = generateToken(user._id);
 
     res.status(201).json({
@@ -65,7 +65,7 @@ export const register = async (req, res) => {
 
 
 
-
+//login route
 export const login = async (req, res) => {
     try {
     const { email, password } = req.body;
@@ -80,6 +80,7 @@ export const login = async (req, res) => {
     const isPasswordCorrect = await user.comparePassword(password);
     if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid credentials" });
 
+    //create token for user 
     const token = generateToken(user._id);
 
     res.status(200).json({
@@ -96,5 +97,5 @@ export const login = async (req, res) => {
     console.log("Error in login route", error);
     res.status(500).json({ message: "Internal server error" });
   }
-};
 
+};

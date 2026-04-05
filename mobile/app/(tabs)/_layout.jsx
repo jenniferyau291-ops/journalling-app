@@ -1,12 +1,12 @@
 
-import { Tabs } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import { Tabs } from "expo-router"; // let you have tabs
+import { Ionicons } from "@expo/vector-icons"; // icons for tabs
 
 import COLOURS from "../../constants/colours";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context"; // safe area padding for phones
 
 export default function TabLayout() {
-  const insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets(); // how much space at bottom so tabs dont overlap 
 
   return (
     <Tabs

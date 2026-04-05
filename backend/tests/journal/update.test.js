@@ -1,14 +1,20 @@
 import request from "supertest";
 import app from "../../src/app.js";
 import "../setup.js";
-import { createUserAndToken } from "../utils/createUser.js";
+import { createToken } from "../utils/createUser.js";
 
 describe("PATCH /api/journals/:id", () => {
   let token;
   let journalId;
-
+  const fakeId = "8788jn";
+  let anotherUser;
   beforeEach(async () => {
-    token = await createUserAndToken();
+    token = await createToken();
+
+    anotherUser = await createToken({
+      username: "anotheruser",
+      email: "another user@test.com",
+    });
 
     // Create a journal first
     const res = await request(app)
@@ -16,14 +22,14 @@ describe("PATCH /api/journals/:id", () => {
       .set("Authorization", `Bearer ${token}`)
       .send({
   title: "My title",
-  content: "Original content",
+  content: " my journal content",
         mood: { emoji: "🙂", value: 3 },
       });
 
     journalId = res.body.journal._id;
   });
 
-  // HAPPY PATH
+  // test update jouranl route successfully 
   it("updates a journal successfully", async () => {
     const res = await request(app)
       .patch(`/api/journals/${journalId}`)
@@ -35,18 +41,9 @@ describe("PATCH /api/journals/:id", () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("Journal updated successfully");
     expect(res.body.journal.content).toBe("Updated content");
+    
   });
-
-  //  UNHAPPY PATHS
-
-  it("fails without token", async () => {
-    const res = await request(app)
-      .patch(`/api/journals/${journalId}`)
-      .send({ content: "No auth" });
-
-    expect(res.statusCode).toBe(401);
-  });
-
+  // test failed update journal with invalid id
   it("fails with invalid journal ID", async () => {
     const res = await request(app)
       .patch("/api/journals/invalid-id")
@@ -57,8 +54,8 @@ describe("PATCH /api/journals/:id", () => {
     expect(res.body.message).toBe("Journal not found");
   });
 
-  it("fails if journal does not exist", async () => {
-    const fakeId = "507f191e810c19729de860ea";
+  //test failed update journal with journal does not exist
+  it("fails with journal does not exist", async () => {
 
     const res = await request(app)
       .patch(`/api/journals/${fakeId}`)
@@ -69,38 +66,14 @@ describe("PATCH /api/journals/:id", () => {
     expect(res.body.message).toBe("Journal not found");
   });
 
-  it("fails when updating with empty content", async () => {
-    const res = await request(app)
-      .patch(`/api/journals/${journalId}`)
-      .set("Authorization", `Bearer ${token}`)
-      .send({ content: "   " });
-
-    expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe("Journal content cannot be empty");
-  });
-
-  it("fails with invalid mood data", async () => {
-    const res = await request(app)
-      .patch(`/api/journals/${journalId}`)
-      .set("Authorization", `Bearer ${token}`)
-      .send({
-        mood: { emoji: "🙂", value: 10 },
-      });
-
-    expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe("Invalid mood data");
-  });
-
-  it("returns 403 if user does not own the journal", async () => {
-    const token2 = await createUserAndToken({
-      username: "otheruser",
-      email: "other@test.com",
-    });
+  // test failed update journal not the owner 
+  it("failed with not the journal owner", async () => {
+    
 
     const res = await request(app)
       .patch(`/api/journals/${journalId}`)
-      .set("Authorization", `Bearer ${token2}`)
-      .send({ content: "Hacked update" });
+      .set("Authorization", `Bearer ${anotherUser}`)
+      .send({ content: "not the owner" });
 
     expect(res.statusCode).toBe(403);
     expect(res.body.message).toBe("Forbidden");

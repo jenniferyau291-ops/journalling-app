@@ -1,16 +1,16 @@
 import {
   View,
   Text,
-  Platform,
   KeyboardAvoidingView,
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Image,
   Alert,
 } from "react-native";
 
 import { useState } from "react";
-import styles from "../../assets/styles/create.styles";
+import styles from "../../assets/styles/signup.styles";
 import COLOURS from "../../constants/colours";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -30,6 +30,7 @@ export default function signup() {
 
     const router = useRouter();
 
+    //register function 
    const handleSignUp = async ()=>{
     const result = await register(username, email, password);
 
@@ -42,12 +43,15 @@ export default function signup() {
       behavior="height"
     >
       <View style={styles.container}>
+         <View style={styles.topIllustration}>
+  <Image
+    source={require("../../assets/images/Hand-holding-pen-amico.png")}
+    style={styles.illustrationImage}
+    resizeMode="contain"
+  />
+         <Text style={styles.appTitle}>Journal App</Text>
+         </View>
         <View style={styles.card}>
-          {/* HEADER */}
-          <View style={styles.header}>
-            <Text style={styles.title}>Journal App</Text>
-            <Text style={styles.subtitle}>Reflect. Write. Grow</Text>
-          </View>
 
           <View style={styles.formContainer}>
             {/* USERNAME INPUT */}
@@ -129,7 +133,7 @@ export default function signup() {
               {isLoading ? (
                 <ActivityIndicator color="#fff" />
               ) : (
-                <Text style={styles.buttonText}>Sign Up</Text>
+                <Text style={styles.buttonText}>Sign Up</Text> // when pressed register function and show loading 
               )}
             </TouchableOpacity>
 

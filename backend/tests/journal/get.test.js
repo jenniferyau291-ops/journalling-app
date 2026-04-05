@@ -1,16 +1,19 @@
 import request from "supertest";
 import app from "../../src/app.js";
 import "../setup.js";
-import { createUserAndToken } from "../utils/createUser.js";
+import { createToken } from "../utils/createUser.js";
 
 describe("GET /api/journals", () => {
   let token;
 
+  //get token
+
   beforeEach(async () => {
-    token = await createUserAndToken();
+    token = await createToken();
   });
 
-  it("gets journals for logged-in user", async () => {
+  // test get journals successfully 
+  it("gets journals for user", async () => {
     // Create a journal first
     await request(app)
       .post("/api/journals")
@@ -22,12 +25,14 @@ describe("GET /api/journals", () => {
 });
 
 
-    // Fetch journals
     const res = await request(app)
       .get("/api/journals")
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.statusCode).toBe(200);
-    expect(res.body.journals.length).toBe(1);
+    expect(res.body.journals.length).toBe(1);expect(res.body.journals[0].title).toBe("My title");
+    expect(res.body.currentPage).toBe(1);
+    expect(res.body.totalJournals).toBe(1);
+    expect(res.body.totalPages).toBe(1);
   });
 });

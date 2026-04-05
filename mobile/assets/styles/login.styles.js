@@ -12,36 +12,35 @@ const styles = StyleSheet.create({
     padding: 20,
      justifyContent: "flex-start", // aligns to top
     borderWidth: 1,
-    borderColor: COLOURS.outline, // subtle Android-style page border
+    borderColor: COLOURS.outline, 
   },
-  appTitle: {
-  fontSize: 28,
+  
+   appTitle: {
+  fontSize: 27,
   fontWeight: "700",
+  lineHeight:34,
   color: COLOURS.textPrimary,
   marginTop: 12,
   marginBottom: 15,
   fontFamily: FONT_TITLE,
-   borderWidth: 1.5,            // thin, clean border like Android
-  borderColor: COLOURS.primary, // matches theme
-  borderRadius: 4,              // slight rounding
-  paddingHorizontal: 16,        // horizontal padding inside border
-  paddingVertical: 8,           // vertical padding inside border
-  textAlign: "center",          // centers the text
-  alignSelf: "center",          // centers the border itself in the container
+   borderWidth: 1.5,            
+  borderColor: COLOURS.primary, 
+  borderRadius: 4,              
+  paddingHorizontal: 16,        
+  paddingVertical: 8,           
+  textAlign: "center",          
+  alignSelf: "center",         
   backgroundColor: COLOURS.cardBackground,
+  fontStyle: "italic"
 },
-
-  scrollViewStyle: {
-    flex: 1,
-    backgroundColor: COLOURS.background,
-  },
+  
 
   topIllustration: {
     alignItems: "center",
     width: "100%",
   },
 
-  illustrationImage: {
+ illustrationImage: {
   width: width * 0.6,
   height: width * 0.6,
   marginBottom: 12,
@@ -68,26 +67,7 @@ const styles = StyleSheet.create({
     }),
   },
 
-  header: {
-    alignItems: "center",
-    marginBottom: 24,
-  },
-
-  title: {
-    fontSize: 32,
-    fontWeight: "700",
-    color: COLOURS.textPrimary,
-    marginBottom: 8,
-    fontFamily: FONT,
-  },
-
-  subtitle: {
-    fontSize: 16,
-    color: COLOURS.textSecondary,
-    textAlign: "center",
-    fontFamily: FONT,
-  },
-
+  
   formContainer: {
     marginBottom: 16,
   },
@@ -187,19 +167,6 @@ const styles = StyleSheet.create({
     fontFamily: FONT,
   },
 
-  errorText: {
-    color: COLOURS.error,
-    fontSize: 14,
-    marginTop: 4,
-    fontFamily: FONT,
-  },
-
-  successText: {
-    color: COLOURS.success,
-    fontSize: 14,
-    marginTop: 4,
-    fontFamily: FONT,
-  },
 });
 
 export default styles;
