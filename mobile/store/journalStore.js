@@ -10,6 +10,7 @@ export const useJournalStore = create((set, get) => ({
   refreshing: false,
   page: 1,
   hasMore: true,
+  moods:[],
 
 
   //get page num which is default to 1 and defailt to scrolling 
@@ -160,3 +161,26 @@ export const useJournalStore = create((set, get) => ({
 },
 
 }));
+fetchMoods: async () => {
+    //read token from logged in user 
+    const { token } = useAuthStore.getState();
+
+    try {
+
+//calls server to get mood and add the token 
+      const res = await fetch(`${API_URL}/journals/mood`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to fetch mood data");
+      
+      set({
+       moods: data.moods
+      });
+    } catch (error) {
+      console.log("Error fetching mood data", error);
+    } 
+  };
+
+

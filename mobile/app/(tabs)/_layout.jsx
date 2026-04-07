@@ -49,7 +49,7 @@ export default function TabLayout() {
        <Tabs.Screen
         name="graph"
          options={{
-          title: "Graph",
+          title: "Mood Tracker",
           tabBarIcon: ({ colour, size }) => (
             <Ionicons name="trending-up-outline" size={size} color={colour} />
           ),
