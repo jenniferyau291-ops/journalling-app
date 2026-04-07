@@ -13,8 +13,8 @@ const COLOURS = {
   border: "#E1BEE7",
   outline: "#D1C4E9",
 
-  error: "#D32F2F",     // Material Red 700
-  success: "#388E3C",   // Material Green 700
+  error: "#D32F2F",     
+  success: "#388E3C",   
 
   white: "#FFFFFF",
   black: "#000000",

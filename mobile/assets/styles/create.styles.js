@@ -1,7 +1,7 @@
 // styles/create.styles.js
 import { StyleSheet, Platform } from "react-native";
 import COLOURS from "../../constants/colours";
-import { FONT, FONT_TITLE } from "../../constants/typography";
+import { FONT} from "../../constants/typography";
 
 const styles = StyleSheet.create({
   container: {
@@ -12,6 +12,10 @@ const styles = StyleSheet.create({
   justifyContent: "flex-start",
   paddingBottom: 40,
 },
+ scrollViewStyle: {
+    flex: 1,
+    backgroundColor: COLOURS.background,
+  },
 
 
   card: {
@@ -46,7 +50,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: COLOURS.textPrimary,
     marginBottom: 8,
-    fontFamily: FONT_TITLE,
+    fontFamily: FONT,
   },
 
   subtitle: {
@@ -134,25 +138,7 @@ moodButton: {
 },
 
 
-  imagePicker: {
-    width: "100%",
-    height: 200,
-    backgroundColor: COLOURS.inputBackground,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: COLOURS.border,
-    overflow: "hidden",
-    ...Platform.select({
-      android: {
-        elevation: 1,
-      },
-    }),
-  },
-
-  previewImage: {
-    width: "100%",
-    height: "100%",
-  },
+  
 
   placeholderContainer: {
     width: "100%",
@@ -161,24 +147,7 @@ moodButton: {
     alignItems: "center",
   },
 
-  placeholderText: {
-    color: COLOURS.textSecondary,
-    marginTop: 8,
-  },
 
-  errorText: {
-    color: COLOURS.error,
-    fontSize: 14,
-    marginTop: 4,
-    fontFamily: FONT,
-  },
-
-  successText: {
-    color: COLOURS.success,
-    fontSize: 14,
-    marginTop: 4,
-    fontFamily: FONT,
-  },
 
   button: {
     backgroundColor: COLOURS.primary,
@@ -212,23 +181,7 @@ moodButton: {
     marginRight: 8,
   },
 
-  footer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 24,
-  },
-
-  footerText: {
-    color: COLOURS.textSecondary,
-    marginRight: 5,
-    fontFamily: FONT,
-  },
-
-  link: {
-    color: COLOURS.primary,
-    fontWeight: "600",
-    fontFamily: FONT,
-  },
+  
 });
 
 export default styles;

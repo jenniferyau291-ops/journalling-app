@@ -1,34 +1,37 @@
 import request from "supertest";
 import app from "../../src/app.js";
 import "../setup.js";
-import { createUserAndToken } from "../utils/createUser.js";
+import { createToken } from "../utils/createUser.js";
 
 describe("DELETE /api/journals/:id", () => {
   let token;
   let journalId;
-  let otherUserToken;
+  let anotherUser;
+
+  // get token
 
   beforeEach(async () => {
-    token = await createUserAndToken();
-    otherUserToken = await createUserAndToken({
-      username: "otheruser",
-      email: "other@test.com",
+    token = await createToken();
+     anotherUser = await createToken({
+      username: "anotheruser",
+      email: "anotheruser@test.com",
     });
 
+    //created journal and get the id for testing
     const res = await request(app)
       .post("/api/journals")
       .set("Authorization", `Bearer ${token}`)
       .send({
   title: "My title",
-  content: "My first journal",
+  content: "My journal",
   mood: { emoji: "🙂", value: 4 },
 });
-
 
     journalId = res.body.journal._id;
   });
 
-  // Happy path
+  // test delete successfully 
+
   it("deletes a journal successfully", async () => {
     const res = await request(app)
       .delete(`/api/journals/${journalId}`)
@@ -38,9 +41,9 @@ describe("DELETE /api/journals/:id", () => {
     expect(res.body.message).toBe("Journal deleted successfully");
   });
 
-  //  Unhappy paths
-  it("returns 404 if journal does not exist", async () => {
-    const fakeId = "64fbe99999a9999999999999";
+  //  test failed delete wrong journal id 
+  it("failed if journal does not exist", async () => {
+    const fakeId = "64fbe9767f12345678912345";
     const res = await request(app)
       .delete(`/api/journals/${fakeId}`)
       .set("Authorization", `Bearer ${token}`);
@@ -49,10 +52,11 @@ describe("DELETE /api/journals/:id", () => {
     expect(res.body.message).toBe("Journal not found");
   });
 
-  it("returns 403 if user is not owner", async () => {
+  // test failed delete if not the user 
+  it("failed if user is not the journal owner", async () => {
     const res = await request(app)
       .delete(`/api/journals/${journalId}`)
-      .set("Authorization", `Bearer ${otherUserToken}`);
+      .set("Authorization", `Bearer ${anotherUser}`);
 
     expect(res.statusCode).toBe(403);
     expect(res.body.message).toBe("Forbidden");

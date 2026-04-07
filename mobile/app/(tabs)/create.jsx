@@ -14,8 +14,8 @@ import { useRouter } from "expo-router";
 import styles from "../../assets/styles/create.styles";
 import { Ionicons } from "@expo/vector-icons";
 import COLOURS from "../../constants/colours";
-import MoodSelector from "../../components/moodSelector";
-import { useJournalStore } from "../../store/journalStore";
+import MoodSelector from "../../components/moodSelector"; //access to the mood selector 
+import { useJournalStore } from "../../store/journalStore"; //creating journal and accessing state 
 
 
 
@@ -29,7 +29,7 @@ export default function Create() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const { createJournal } = useJournalStore();
+  const { createJournal } = useJournalStore(); 
 
 
   const handleSubmit = async () => {
@@ -39,9 +39,9 @@ export default function Create() {
   }
 
   try {
-    setLoading(true);
+    setLoading(true); // loading 
 
-    const result = await createJournal({ title, content, mood });
+    const result = await createJournal({ title, content, mood }); //calls the create journal from the store
 
     if (!result.success) {
       throw new Error(result.message);
@@ -51,7 +51,7 @@ export default function Create() {
 
     setTitle("");
     setContent("");
-    setMood({ emoji: "😐", value: 3 });
+    setMood({ emoji: "😐", value: 3 }); // set this as default 
 
     router.push("/");
   } catch (error) {
@@ -68,7 +68,6 @@ export default function Create() {
   style={{ flex: 1 }}
   behavior={Platform.OS === "ios" ? "padding" : undefined}
 >
-
       <ScrollView contentContainerStyle={styles.container} style={styles.scrollViewStyle}>
         <View style={styles.card}>
           {/* HEADER */}
@@ -77,7 +76,7 @@ export default function Create() {
             <Text style={styles.subtitle}>Share your thoughts</Text>
           </View>
 
-          <View style={styles.form}>
+          <View style={styles.formContainer}>
             {/* Journal TITLE */}
             <View style={styles.formGroup}>
               <Text style={styles.label}>Journal Title</Text>
@@ -98,9 +97,10 @@ export default function Create() {
               </View>
             </View>
 
-           {/* MOOD */}
+           {/* MOOD  calls mood selector */}
 <View style={styles.formGroup}>
   <Text style={styles.label}>How are you feeling?</Text>
+  
   <MoodSelector mood={mood} setMood={setMood} />
 </View>
 
@@ -117,8 +117,9 @@ export default function Create() {
                 multiline
               />
             </View>
+            
 
-            <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={loading}>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={loading}> 
               {loading ? (
                 <ActivityIndicator color={COLOURS.white} />
               ) : (
@@ -129,7 +130,7 @@ export default function Create() {
                     color={COLOURS.white}
                     style={styles.buttonIcon}
                   />
-                  <Text style={styles.buttonText}>Share</Text>
+                  <Text style={styles.buttonText}>Share</Text> 
                 </>
               )}
             </TouchableOpacity>

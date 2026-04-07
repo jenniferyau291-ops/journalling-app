@@ -14,13 +14,13 @@ import {
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import styles from "../../../assets/styles/create.styles";
-import COLOURS from "../../../constants/colours";
-import MoodSelector from "../../../components/moodSelector";
-import { useJournalStore } from "../../../store/journalStore";
+import styles from "../../assets/styles/create.styles";
+import COLOURS from "../../constants/colours";
+import MoodSelector from "../../components/moodSelector";
+import { useJournalStore } from "../../store/journalStore";
 
 export default function EditJournal() {
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams(); // get journal id from url
   const router = useRouter();
   const { journals, getJournalById, updateJournal, deleteJournal } = useJournalStore();
 
@@ -34,12 +34,13 @@ export default function EditJournal() {
   useEffect(() => {
     const loadJournal = async () => {
       try {
-        let found = journals.find((j) => j._id === id);
+        let found = journals.find((j) => j._id === id); //check local store 
         if (!found) {
-          found = await getJournalById(id);
+          found = await getJournalById(id); //fetch journal from function 
         }
         if (!found) throw new Error("Journal not found");
 
+        //set the form with the data 
         setTitle(found.title);
         setContent(found.content);
         setMood(found.mood || { emoji: "😐", value: 3 });
@@ -69,8 +70,8 @@ export default function EditJournal() {
           onPress: async () => {
             try {
               setLoading(true);
-              const result = await updateJournal(id, { title, content, mood });
-              if (!result.success) throw new Error(result.message);
+              const result = await updateJournal(id, { title, content, mood }); // update journal function wtih the data
+              if (!result) throw new Error("Failed to update journal");
 
               Alert.alert("Success", "Journal updated successfully!");
               router.push(`/journal/${id}`);
@@ -95,8 +96,8 @@ export default function EditJournal() {
         onPress: async () => {
           try {
             setLoading(true);
-            await deleteJournal(id);
-            router.push("/");
+            await deleteJournal(id);   // delete function
+            router.push("/"); // backto home screen
           } catch (error) {
             Alert.alert("Error", error.message || "Failed to delete journal");
           } finally {
@@ -123,7 +124,7 @@ export default function EditJournal() {
             </View>
 
             {/* FORM */}
-            <View style={styles.form}>
+            <View style={styles.formContainer}>
               {/* Title */}
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Journal Title</Text>

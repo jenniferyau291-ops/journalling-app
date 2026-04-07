@@ -7,10 +7,12 @@ import { useAuthStore } from "../store/authStore";
 import { useEffect } from "react";
 
 export default function RootLayout() {
-  const router = useRouter();
-  const segments = useSegments();
+  const router = useRouter(); // move screens
+  const segments = useSegments(); // what screen currently on 
   const { checkAuth, user, token, isCheckingAuth } = useAuthStore();
 
+
+  //check if user logged in when app opens
   useEffect(() => {
     checkAuth();
   }, []);
@@ -21,15 +23,15 @@ export default function RootLayout() {
     const inAuthScreen = segments[0] === "(auth)";
     const isSignedIn = user && token;
 
-    if (!isSignedIn && !inAuthScreen) router.replace("/(auth)");
-    else if (isSignedIn && inAuthScreen) router.replace("/(tabs)");
+    if (!isSignedIn && !inAuthScreen) router.replace("/(auth)"); // not logged in and not on login (auth screen) go to it 
+    else if (isSignedIn && inAuthScreen) router.replace("/(tabs)"); // logged in and in auth screen to go to main app (tabs)
   }, [user, token, segments]);
 
   return (
-
+// dont show anything until checks are done 
   <SafeAreaProvider>
   <SafeScreen>
-  {isCheckingAuth ? null : <Slot />}
+  {isCheckingAuth ? null : <Slot />} 
 </SafeScreen>
   <StatusBar style="dark" />
 </SafeAreaProvider>

@@ -6,10 +6,14 @@ process.env.JWT_SECRET = "testsecret";
 
 let mongo;
 
+
+//before each test - creates temp in memory mongodb and connecting to mongoose
 beforeAll(async () => {
   mongo = await MongoMemoryServer.create();
   await mongoose.connect(mongo.getUri());
 });
+
+//after each test to clear the db - grabbing all collections and deleting 
 
 afterEach(async () => {
   const collections = mongoose.connection.collections;
@@ -17,6 +21,8 @@ afterEach(async () => {
     await collections[key].deleteMany();
   }
 });
+
+//close connection and stop the in memory server
 
 afterAll(async () => {
   await mongoose.connection.close();

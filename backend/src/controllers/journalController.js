@@ -1,5 +1,9 @@
 import Journal from "../models/Journal.js";
+import User from "../models/User.js";
 import mongoose from "mongoose";
+import { format, differenceInCalendarDays, addDays } from "date-fns";
+
+
 
 /**
  * CREATE journal
@@ -8,39 +12,66 @@ export const createJournal = async (req, res) => {
   try {
     const { title, content, mood } = req.body;
 
-     if (!title || !title.trim()) {
+    // Validation
+    if (!title || !title.trim()) {
       return res.status(400).json({ message: "Journal title is required" });
     }
-
-    if (!content) {
+    if (!content || !content.trim()) {
       return res.status(400).json({ message: "Journal content is required" });
     }
-
-    if (
-      !mood ||
-      !mood.emoji ||
-      typeof mood.value !== "number" ||
-      mood.value < 1 ||
-      mood.value > 5
-    ) {
+    if (!mood || !mood.emoji || typeof mood.value !== "number" || mood.value < 1 || mood.value > 5) {
       return res.status(400).json({ message: "Invalid mood data" });
     }
 
+    const userId = req.user._id;
+
+    // Create journal
     const newJournal = new Journal({
       title,
       content,
-      mood: {
-        emoji: mood.emoji,
-        value: mood.value,
-      },
-      user: req.user._id,
+      mood: { emoji: mood.emoji, value: mood.value },
+      user: userId,
     });
-
     await newJournal.save();
 
+    // Update streak
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    //set date as today
+    const today = new Date();
+    //set to midnight to remove hours
+    today.setHours(0, 0, 0, 0);
+
+    //get last journal date and set to midnight
+
+    let lastJournalDate = user.lastJournalDate ? new Date(user.lastJournalDate) : null;
+    if (lastJournalDate) lastJournalDate.setHours(0, 0, 0, 0);
+
+    let newStreak = user.streakCount || 0;
+
+    if (!lastJournalDate) {
+      // First ever journal
+      newStreak = 1;
+    } else {
+      //get the difference between last journal date and currrent date 
+      const dayDifference = differenceInCalendarDays(today, lastJournalDate);
+      if (dayDifference === 1) {
+        newStreak += 1; // consecutive day
+      } else if (dayDifference > 1) {
+        newStreak = 0; // missed day(s)
+      } 
+    }
+
+    user.lastJournalDate = today;
+    user.streakCount = newStreak;
+    await user.save();
+
+    // Send response
     res.status(201).json({
       message: "Journal entry created successfully",
       journal: newJournal,
+      streakCount: newStreak,
     });
   } catch (error) {
     console.error("Error creating journal:", error);
@@ -48,17 +79,21 @@ export const createJournal = async (req, res) => {
   }
 };
 
+
 /**
  * GET journals (pagination / infinite loading)
  */
 export const getJournals = async (req, res) => {
   try {
+    // read page number 
     const page = Number(req.query.page) || 1;
+    //show how many on a page
     const limit = Number(req.query.limit) || 5;
     const skip = (page - 1) * limit;
 
+    //get journal from the user 
     const journals = await Journal.find({ user: req.user._id })
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: -1 }) // sort newest first 
       .skip(skip)
       .limit(limit)
       .populate("user", "username");
@@ -89,7 +124,7 @@ export const deleteJournal = async (req, res) => {
       return res.status(404).json({ message: "Journal not found" });
     }
 
-    if (journal.user.toString() !== req.user._id.toString()) {
+     if (!journal.user._id.equals( req.user._id)) {
       return res.status(403).json({ message: "Forbidden" });
     }
 
@@ -102,32 +137,36 @@ export const deleteJournal = async (req, res) => {
   }
 };
 
-/**
- * UPDATE journal
- */
+//update journal
 export const updateJournal = async (req, res) => {
   try {
     const { title, content, mood } = req.body;
-
-    // ✅ Check if ID is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+   //get the id from url
+    const {id} = req.params
+    //check if if is valid in mongodb and if not return invalid message
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(404).json({ message: "Journal not found" });
     }
-    const journal = await Journal.findById(req.params.id);
+    // get journal by the id
+
+    const journal = await Journal.findById(id);
     if (!journal) {
       return res.status(404).json({ message: "Journal not found" });
     }
 
-    if (journal.user.toString() !== req.user._id.toString()) {
+    if (!journal.user._id.equals( req.user._id)) {
       return res.status(403).json({ message: "Forbidden" });
     }
+
+    //check if user put new title and if it is empty
+
     if (title !== undefined) {
   if (!title.trim()) {
-    return res.status(400).json({ message: "Journal title cannot be empty" });
+    return res.status(400).json({ message: "title cannot be empty" });
   }
   journal.title = title;
 }
-
+//check if user put new journalling content and if it is empty 
     if (content !== undefined) {
       if (!content.trim()) {
         return res
@@ -161,25 +200,23 @@ export const updateJournal = async (req, res) => {
   }
   
 };
-/**
- * GET single journal
- */
+// get journal by id 
 export const getJournalById = async (req, res) => {
   try {
-    // ✅ Validate ID
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    //get the id from url
+    const {id} = req.params
+    //check if if is valid in mongodb and if not return invalid message
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(404).json({ message: "Journal not found" });
     }
-
-    const journal = await Journal.findById(req.params.id)
-      .populate("user", "username");
+    // get journal by id and the owner id and username
+    const journal = await Journal.findById(id).populate("user", "username");
 
     if (!journal) {
       return res.status(404).json({ message: "Journal not found" });
     }
 
-    // 🔒 Make sure user owns this journal
-    if (journal.user._id.toString() !== req.user._id.toString()) {
+    if (!journal.user._id.equals( req.user._id)) {
       return res.status(403).json({ message: "Forbidden" });
     }
 

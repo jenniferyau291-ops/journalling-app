@@ -26,13 +26,15 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const { isLoading, login, isCheckingAuth } = useAuthStore()
 
+
+  //login function 
   const handleLogin =  async () => {
      const result = await login(email, password);
 
     if (!result.success) Alert.alert("Error", result.error);
   };
 
-  if (isCheckingAuth) return null;
+  if (isCheckingAuth) return null; //check to see if user logged in 
 
   return (
     <KeyboardAvoidingView
@@ -107,19 +109,20 @@ export default function Login() {
                 </TouchableOpacity>
               </View>
             </View>
-
+        
             <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={isLoading}>
               {isLoading ? (
                 <ActivityIndicator color="#fff" />
               ) : (
-                <Text style={styles.buttonText}>Login</Text>
+                <Text style={styles.buttonText}>Login</Text> // login button when pressed calls the login function and show loading
               )}
             </TouchableOpacity>
 
             {/* FOOTER */}
+            
             <View style={styles.footer}>
               <Text style={styles.footerText}>Don't have an account?</Text>
-              <Link href="/signup" asChild>
+              <Link href="/signup" asChild>  
                 <TouchableOpacity>
                   <Text style={styles.link}>Sign Up</Text>
                 </TouchableOpacity>

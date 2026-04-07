@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
+
+//middleware that protects routes - check if user is logged in 
 const protectRoute = async (req, res, next) => {
   try {
     // get token from Authorization header
@@ -8,7 +10,7 @@ const protectRoute = async (req, res, next) => {
     if (!authHeader)
       return res.status(401).json({ message: "No authentication token, access denied" });
 
-    // extract token (remove 'Bearer ' prefix)
+    // extract token'
     const token = authHeader.replace("Bearer ", "");
     if (!token)
       return res.status(401).json({ message: "No authentication token, access denied" });
@@ -16,7 +18,7 @@ const protectRoute = async (req, res, next) => {
     // verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // find user
+    // find user in the db without password
     const user = await User.findById(decoded.userId).select("-password");
     if (!user) return res.status(401).json({ message: "Token is not valid" });
 

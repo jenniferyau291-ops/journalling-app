@@ -6,17 +6,24 @@ import { useRouter } from "expo-router";
 import styles from "../../assets/styles/home.styles";
 import COLOURS from "../../constants/colours";
 
-// Zustand store
-import { useJournalStore } from "../../store/journalStore";
+import { useJournalStore } from "../../store/journalStore"; // access journal data 
+import { useUserStore } from "../../store/userStore"; //access user data 
 
 export default function Home() {
   const router = useRouter();
   const { journals, loading, refreshing, page, hasMore, fetchJournals } = useJournalStore();
+ const streakCount = useUserStore((state) => state.streakCount);
+const getStreaks = useUserStore((state) => state.getStreaks); 
 
   useEffect(() => {
-    fetchJournals();
+  getStreaks(); // fetch streak from backend
+  }, [getStreaks]);
+
+  useEffect(() => {
+    fetchJournals(); //fetch journals from backend
   }, []);
 
+  //map mood to values and their colour 
   const getMoodDetails = (value) => {
     switch (value) {
       case 1: return { label: "Very Low", color: "#f28b82" };
@@ -27,6 +34,8 @@ export default function Home() {
       default: return { label: "Mood", color: "#ddd" };
     }
   };
+
+  //render each journal 
 
   const renderItem = ({ item }) => {
     const mood = getMoodDetails(item.mood?.value);
@@ -63,7 +72,7 @@ export default function Home() {
     );
   };
 
-  if (loading) return <Loader />;
+  if (loading) return <Loader />; // show loading if loading
 
   return (
     <View style={styles.container}>
@@ -73,6 +82,7 @@ export default function Home() {
         keyExtractor={(item) => item._id}
         contentContainerStyle={styles.listContainer}
         refreshControl={
+          // pulls down to refres, get journals and load first page
           <RefreshControl
             refreshing={refreshing}
             onRefresh={() => fetchJournals(1, true)}
@@ -80,6 +90,7 @@ export default function Home() {
             tintColor={COLOURS.primary}
           />
         }
+        // if there is more to to scroll once hit 10% bottom to load 
         onEndReached={() => {
           if (hasMore && !loading && !refreshing) fetchJournals(page + 1);
         }}
@@ -88,13 +99,17 @@ export default function Home() {
           <View style={styles.header}>
             <Text style={styles.headerTitle}>Journal App</Text>
             <Text style={styles.headerSubtitle}>Reflect. Write. Grow</Text>
+            <Text style={styles.headerSubtitle}>Streak: {streakCount} 🔥</Text>
+       
           </View>
         }
+        //show spinner at bottom if there is more journal to load 
         ListFooterComponent={
           hasMore && journals.length > 0 ? (
             <ActivityIndicator style={styles.footerLoader} size="small" color={COLOURS.primary} />
           ) : null
         }
+        //for no journal 
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="journal-outline" size={60} color={COLOURS.textSecondary} />
