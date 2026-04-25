@@ -227,3 +227,19 @@ export const getJournalById = async (req, res) => {
   }
 };
 
+/**
+ * GET moods 
+ */
+export const getMood = async (req, res) => {
+  try {
+   
+    //get the mood and date from journal from the user 
+    const moods = await Journal.find({ user: req.user._id }). select ("mood.emoji mood.value createdAt ")
+    
+
+    res.status(200).json(moods);
+  } catch (error) {
+    console.log("Error in get all moods", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
