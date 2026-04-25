@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 20,
     width: "100%",
-    minHeight: 300, // ensures card isn’t too small
+    minHeight: 300, // card isn’t too small
     marginTop: 16, // space below header
     borderWidth: 1,
     borderColor: COLOURS.border,

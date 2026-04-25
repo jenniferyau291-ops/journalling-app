@@ -1,5 +1,5 @@
 
-import { Tabs } from "expo-router"; // let you have tabs
+import { Tabs } from "expo-router"; //  tabs
 import { Ionicons } from "@expo/vector-icons"; // icons for tabs
 
 import COLOURS from "../../constants/colours";

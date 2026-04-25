@@ -1,40 +1,257 @@
 import request from "supertest";
 import app from "../../src/app.js";
 import "../setup.js";
-import { createToken } from "../utils/createUser.js";
+import { createToken, createUserAndToken } from "../utils/createUser.js";
+import Journal from "../../src/models/Journal.js"; 
+import mongoose from "mongoose";
 
-describe("GET /api/journals/mood", () => {
-  let token;
+
+
+//describe("GET /api/journals/mood", () => {
+  //jest.setTimeout(20000); // 20 seconds
+  //let token;
   
 
   //get token
 
-  beforeEach(async () => {
-   token  = await createToken();
-  });
+  //beforeEach(async () => {
+  // token  = await createToken();
+ // });
   
 
   // test get mood successfully 
-  it("gets mood from journal for user", async () => {
+ // it("gets mood from journal for user", async () => {
     // Create a journal first
-    await request(app)
-      .post("/api/journals")
-      .set("Authorization", `Bearer ${token}`)
-      .send({
-  title: "My title",
-  content: "My first journal",
-  mood: { emoji: "🙂", value: 4 },
+    //const journal1 = 
+   // const journal1 = await request(app)
+  //.post("/api/journals")
+  //.set("Authorization", `Bearer ${token}`)
+  //.send({ title: "Journal 1", content: "First", mood: { emoji: "🙂", value: 5 } });
+
+//await Journal.updateOne(
+ // { _id: journal1.body.journal._id },
+ // { $set: { createdAt: new Date("2026-04-08T12:00:00.000Z"), updatedAt: new Date("2026-04-08T12:00:00.000Z") } }
+//);
+
+//const journal2 = await request(app)
+ // .post("/api/journals")
+ // .set("Authorization", `Bearer ${token}`)
+  //.send({ title: "Journal 2", content: "Second", mood: { emoji: "🙂", value: 5 } });
+
+//await Journal.updateOne(
+ // { _id: journal2.body.journal._id },
+ // { $set: { createdAt: new Date("2026-04-09T12:00:00.000Z"), updatedAt: new Date("2026-04-09T12:00:00.000Z") } }
+//);
+
+//const journal3 = await request(app)
+  //.post("/api/journals")
+  //.set("Authorization", `Bearer ${token}`)
+  //.send({ title: "Journal 3", content: "Third", mood: { emoji: "🙂", value: 4 } });
+
+//await Journal.updateOne(
+  //{ _id: journal3.body.journal._id },
+ // { $set: { createdAt: new Date("2026-04-10T12:00:00.000Z"), updatedAt: new Date("2026-04-10T12:00:00.000Z") } }
+//);
+
+
+    //const res = await request(app)
+      //.get("/api/journals/mood")
+     // .set("Authorization", `Bearer ${token}`);
+
+    //expect(res.statusCode).toBe(200);
+   // expect(res.body.length).toBe(1);
+  // expect(res.body[0].dailymoodByMonth.length).toBe(3);
+
+
+//const month = res.body[0];
+
+
+//const day1 = month.dailymoodByMonth[0];
+//expect(day1.day).toBe(8);
+//expect(day1.moods[0].emoji).toBe("🙂");
+//expect(day1.moods[0].value).toBe(5);
+//expect(day1.moods[0].date).toContain("2026-04-08");
+
+
+//const day2 = month.dailymoodByMonth[1];
+//expect(day2.day).toBe(9);
+//expect(day2.moods[0].value).toBe(5);
+//expect(day2.moods[0].date).toContain("2026-04-09");
+
+
+//const day3 = month.dailymoodByMonth[2];
+//expect(day3.day).toBe(10);
+//expect(day3.moods[0].value).toBe(4);
+//expect(day3.moods[0].date).toContain("2026-04-10");
+//  })
+//});
+
+//describe("GET /api/journals/mood", () => {
+  //jest.setTimeout(20000);
+ //let token;
+
+ //beforeEach(async () => {
+  // token = await createToken();
+  //});
+
+  //it("gets mood from journal for user", async () => {
+
+  
+    //const journal1 = await request(app)
+      //.post("/api/journals")
+      //.set("Authorization", `Bearer ${token}`)
+      //.send({ title: "Journal 1", content: "First", mood: { emoji: "🙂", value: 5 } });
+
+    //await Journal.findByIdAndUpdate(
+      //journal1.body.journal._id,
+      //{
+        //createdAt: new Date("2026-04-08T12:00:00.000Z"),
+        //updatedAt: new Date("2026-04-08T12:00:00.000Z")
+      //},
+      // { new: true }
+    //);
+
+    
+    //const journal2 = await request(app)
+    //  .post("/api/journals")
+  //    .set("Authorization", `Bearer ${token}`)
+//      .send({ title: "Journal 2", content: "Second", mood: { emoji: "🙂", value: 5 } });
+
+//    await Journal.findByIdAndUpdate(
+    //  journal2.body.journal._id,
+     // {
+       // createdAt: new Date("2026-04-09T12:00:00.000Z"),
+       // updatedAt: new Date("2026-04-09T12:00:00.000Z")
+     // },
+     //  { new: true }
+   // );
+
+    
+    //const journal3 = await request(app)
+     // .post("/api/journals")
+     // .set("Authorization", `Bearer ${token}`)
+    //  .send({ title: "Journal 3", content: "Third", mood: { emoji: "🙂", value: 4 } });
+
+   // await Journal.findByIdAndUpdate(
+     // journal3.body.journal._id,
+     // {
+       // createdAt: new Date("2026-04-10T12:00:00.000Z"),
+       // updatedAt: new Date("2026-04-10T12:00:00.000Z")
+     // },
+     //  { new: true }
+    //);
+    //console.log("Journal createdAt values:", (await Journal.find().sort({ createdAt: 1 })).map(j => j.createdAt));
+
+    //const res = await request(app)
+     // .get("/api/journals/mood")
+     // .set("Authorization", `Bearer ${token}`);
+
+   // expect(res.statusCode).toBe(200);
+   // expect(res.body.length).toBe(1);
+   // expect(res.body[0].dailymoodByMonth.length).toBe(3);
+
+   // const month = res.body[0];
+
+  
+   // const day1 = month.dailymoodByMonth[0];
+   // expect(day1.day).toBe(8);
+    //expect(day1.moods[0].emoji).toBe("🙂");
+   // expect(day1.moods[0].value).toBe(5);
+   // expect(day1.moods[0].date).toContain("2026-04-08");
+
+    
+   // const day2 = month.dailymoodByMonth[1];
+   // expect(day2.day).toBe(9);
+   // expect(day2.moods[0].value).toBe(5);
+   // expect(day2.moods[0].date).toContain("2026-04-09");
+
+
+  //  const day3 = month.dailymoodByMonth[2];
+   // expect(day3.day).toBe(10);
+   // expect(day3.moods[0].value).toBe(4);
+  //  expect(day3.moods[0].date).toContain("2026-04-10");
+ // });
+//});
+
+describe("GET /api/journals/mood", () => {
+
+let token, userId;
+
+beforeEach(async () => {
+  const data = await createUserAndToken();
+  token = data.token;   
+  userId = data.userId; 
 });
+
+
+  it("gets mood from journal for user", async () => {
+    // Directly create journals with specific timestamps
+    const journal1 = await Journal.create({
+      user: new mongoose.Types.ObjectId(userId),
+      title: "Journal 1",
+      content: "First",
+      mood: { emoji: "🙂", value: 5 },
+      createdAt: new Date("2026-04-08T12:00:00.000Z"),
+      updatedAt: new Date("2026-04-08T12:00:00.000Z")
+    });
+
+    const journal2 = await Journal.create({
+      user: new mongoose.Types.ObjectId(userId),
+      title: "Journal 2",
+      content: "Second",
+      mood: { emoji: "🙂", value: 5 },
+      createdAt: new Date("2026-04-09T12:00:00.000Z"),
+      updatedAt: new Date("2026-04-09T12:00:00.000Z")
+    });
+
+    const journal3 = await Journal.create({
+      user: new mongoose.Types.ObjectId(userId),
+      title: "Journal 3",
+      content: "Third",
+      mood: { emoji: "🙂", value: 4 },
+      createdAt: new Date("2026-04-10T12:00:00.000Z"),
+      updatedAt: new Date("2026-04-10T12:00:00.000Z")
+    });
+
+    // debug
+console.log(
+  "Journal createdAt values:",
+  (
+    await Journal.find({ user: new mongoose.Types.ObjectId(userId) }).sort({ createdAt: 1 })
+  ).map(j => j.createdAt)
+);
 
 
     const res = await request(app)
       .get("/api/journals/mood")
       .set("Authorization", `Bearer ${token}`);
 
+    
     expect(res.statusCode).toBe(200);
-    expect(res.body[0].mood.emoji).toBe("🙂");
-expect(res.body[0].mood.value).toBe(4);
-expect(res.body[0].createdAt).toBeDefined();
+    expect(res.body.length).toBe(1); // only one month
+    expect(res.body[0].dailymoodByMonth.length).toBe(3); // 3 days
 
+    //store april month data 
+    const month = res.body[0];
+
+
+    //checking first day april 8th
+    const day1 = month.dailymoodByMonth[0];
+    expect(day1.day).toBe(8); 
+    expect(day1.moods[0].emoji).toBe("🙂");
+    expect(day1.moods[0].value).toBe(5);
+    expect(day1.moods[0].date).toContain("2026-04-08");
+
+    // checking second day April 9
+    const day2 = month.dailymoodByMonth[1];
+    expect(day2.day).toBe(9);
+    expect(day2.moods[0].value).toBe(5);
+    expect(day2.moods[0].date).toContain("2026-04-09");
+
+    // checking third day April 10
+    const day3 = month.dailymoodByMonth[2];
+    expect(day3.day).toBe(10);
+    expect(day3.moods[0].value).toBe(4);
+    expect(day3.moods[0].date).toContain("2026-04-10");
   });
 });

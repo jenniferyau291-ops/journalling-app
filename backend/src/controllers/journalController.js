@@ -227,17 +227,69 @@ export const getJournalById = async (req, res) => {
   }
 };
 
+
 /**
  * GET moods 
  */
 export const getMood = async (req, res) => {
   try {
-   
-    //get the mood and date from journal from the user 
-    const moods = await Journal.find({ user: req.user._id }). select ("mood.emoji mood.value createdAt ")
-    
+    //get the data from the journal
+    const moodsByMonth = await Journal.aggregate([
+      { $match: { user: req.user._id } }, //get the data for specific user 
 
-    res.status(200).json(moods);
+      // normalise to midnight 
+      {
+        $addFields: {
+          day: {
+            //cut off the time part of the date - so only the date and no timestamp just 00:00
+            $dateTrunc: {
+              date: "$createdAt",
+              unit: "day"
+            }
+          }
+        }
+      },
+
+      // each day group of mood
+      {
+        $group: {
+          _id: "$day",
+          //mood array and get the data to put in the array
+          moods: {
+            $push: {
+              emoji: "$mood.emoji",
+              value: "$mood.value",
+              date: "$createdAt"
+            }
+          }
+        }
+      },
+
+      { $sort: { _id: 1 } },
+
+      // group by month and year from previous
+      {
+        $group: {
+          _id: {
+            year: { $year: "$_id" },
+            month: { $month: "$_id" }
+          },
+          //array for days in month
+          dailymoodByMonth: {
+            $push: {
+              day: { $dayOfMonth: "$_id" },
+              moods: "$moods",
+              date: "$_id"
+            }
+          }
+        }
+      },
+
+      { $sort: { "_id.year": 1, "_id.month": 1 } }
+    ]);
+
+    return res.status(200).json(moodsByMonth);
+
   } catch (error) {
     console.log("Error in get all moods", error);
     res.status(500).json({ message: "Internal server error" });
