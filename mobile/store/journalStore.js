@@ -11,6 +11,10 @@ export const useJournalStore = create((set, get) => ({
   page: 1,
   hasMore: true,
   moods:[],
+  currentMonth: new Date().getMonth() + 1,
+selectedMonth: new Date().getMonth() + 1,
+
+setSelectedMonth: (month) => set({ selectedMonth: month }),
 
 
   //get page num which is default to 1 and defailt to scrolling 
@@ -24,7 +28,7 @@ export const useJournalStore = create((set, get) => ({
       // if page num only one then show loading 
       else if (pageNum === 1) set({ loading: true });
       
-//calls server to get journal and add the token 
+//make a get request to get journal and add the token 
       const res = await fetch(`${API_URL}/journals?page=${pageNum}&limit=2`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -58,7 +62,7 @@ export const useJournalStore = create((set, get) => ({
     const { token } = useAuthStore.getState();
 
     try {
-      //calls server delete 
+      // make a delete request 
       const res = await fetch(`${API_URL}/journals/${journalId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }, //add token 
@@ -79,7 +83,7 @@ export const useJournalStore = create((set, get) => ({
     const { token } = useAuthStore.getState();
     try {
       set({ loading: true });
-      //calls server to update
+      //make a delete request 
       const response = await fetch(`${API_URL}/journals/${journalId}`, {
         method: "PATCH", // Use PATCH for updates
         headers: {
@@ -95,6 +99,9 @@ export const useJournalStore = create((set, get) => ({
       set((state) => ({
         journals: state.journals.map((j) => (j.id === journalId ? data : j)), // get journals go through each one and get the updated journal information 
       }));
+      //call the fetchMood to update the graph 
+ await get().fetchMoods();
+
 
       return data;
     } catch (error) {
@@ -108,7 +115,7 @@ export const useJournalStore = create((set, get) => ({
     //get token from logged user 
     const { token } = useAuthStore.getState();
 
-    //calls sever to create journal 
+    //make  a post request to create journal 
     try {
       const res = await fetch(`${API_URL}/journals`, {
         method: "POST",
@@ -130,6 +137,8 @@ export const useJournalStore = create((set, get) => ({
        useUserStore.setState({ 
   streakCount: data.streakCount, //update streak count in user store 
 });
+//call the fetchMood to update the graph 
+ await get().fetchMoods();
 
 
       return { success: true, journal: data.journal };
@@ -143,7 +152,7 @@ export const useJournalStore = create((set, get) => ({
   const { token } = useAuthStore.getState();
 
   try {
-    //get request to server and sends token 
+    // make a get request and sends token 
     const res = await fetch(`${API_URL}/journals/${journalId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -160,14 +169,14 @@ export const useJournalStore = create((set, get) => ({
   }
 },
 
-}));
 fetchMoods: async () => {
+  set({ loading: true });
     //read token from logged in user 
     const { token } = useAuthStore.getState();
 
     try {
 
-//calls server to get mood and add the token 
+//make get request to get mood and add the token 
       const res = await fetch(`${API_URL}/journals/mood`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -175,12 +184,23 @@ fetchMoods: async () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to fetch mood data");
       
+      //set({
+      // moods: data
+      //});
+
+      //replace the array with new array with the chnages for update 
       set({
-       moods: data.moods
-      });
+  moods: [...data] 
+});
+
     } catch (error) {
       console.log("Error fetching mood data", error);
-    } 
-  };
+    } finally{
+       set({ loading: false});
+    }
+  },
+
+
+}));
 
 

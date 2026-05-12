@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import styles from "../assets/styles/create.styles"; // or a separate style if needed
+import styles from "../assets/styles/create.styles"; 
 
 //mood selector - current mood and set mood
 const MoodSelector = ({ mood, setMood }) => {

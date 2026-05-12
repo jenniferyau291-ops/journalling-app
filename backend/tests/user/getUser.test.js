@@ -14,10 +14,14 @@ beforeEach(async () => {
   userId = testUser.userId;
 });
  it("resets streak to 0 if a day was missed", async () => {
+  //get user 
      const user = await User.findById(userId);
+     //get current date
     const yesterday = new Date();
+    //-2 day so missed a day 
 yesterday.setDate(yesterday.getDate() - 2);
-yesterday.setHours(0, 0, 0, 0); // normalize for streak logic
+yesterday.setHours(0, 0, 0, 0); // normalise for streak logic
+//set last journal created as 2 days ago
 user.lastJournalDate = yesterday;
 user.streakCount = 0;
 await user.save();
