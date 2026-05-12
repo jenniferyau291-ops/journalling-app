@@ -153,4 +153,26 @@ await user.save();
     expect(res.statusCode).toBe(201);
     expect(res.body.streakCount).toBe(0);
   });
+
+  //testing if 0 streaks add 1 on same day after nournalling 
+it("corrects streak from 0 to 1 on same day journal", async () => {
+  const user = await User.findById(userId);
+
+  user.streakCount = 0;
+  user.lastJournalDate = new Date();
+  await user.save();
+
+  const res = await request(app)
+    .post("/api/journals")
+    .set("Authorization", `Bearer ${token}`)
+    .send({
+      title: "Same day",
+      content: "Same day",
+      mood: { emoji: "🙂", value: 4 },
+    });
+
+  expect(res.body.streakCount).toBe(1);
 });
+
+})
+

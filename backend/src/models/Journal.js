@@ -29,7 +29,11 @@ user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-    }
+    },
+summary:{
+  type: String,
+
+}
 },
 { timestamps: true }
 

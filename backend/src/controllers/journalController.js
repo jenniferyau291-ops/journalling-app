@@ -2,15 +2,18 @@ import Journal from "../models/Journal.js";
 import User from "../models/User.js";
 import mongoose from "mongoose";
 import { format, differenceInCalendarDays, addDays } from "date-fns";
-
+import { aiSummaryGenerator } from "../services/aiSummary.js";
 
 
 /**
  * CREATE journal
  */
 export const createJournal = async (req, res) => {
+  
   try {
     const { title, content, mood } = req.body;
+    //debug
+  console.log("create journal hit:", new Date().toISOString());
 
     // Validation
     if (!title || !title.trim()) {
@@ -25,6 +28,17 @@ export const createJournal = async (req, res) => {
 
     const userId = req.user._id;
 
+    //get user id
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+//debug
+    console.log("debug start");
+console.log("user:", user._id);
+console.log("lastJournalDate:", user.lastJournalDate);
+console.log("streakCount (before):", user.streakCount);
+
+
+
     // Create journal
     const newJournal = new Journal({
       title,
@@ -34,10 +48,18 @@ export const createJournal = async (req, res) => {
     });
     await newJournal.save();
 
-    // Update streak
-    const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    // check if ai summary is set to true and call the method and get the summary and save it to db
 
+    try {
+  if (user.aiPreferences.aiSummary === true) {
+    const summary = await aiSummaryGenerator(newJournal);
+    newJournal.summary = summary;
+    await newJournal.save();
+  }
+} catch (error) {
+  console.error("AI summary failed:", error);
+}
+    // Update streak
     //set date as today
     const today = new Date();
     //set to midnight to remove hours
@@ -48,24 +70,42 @@ export const createJournal = async (req, res) => {
     let lastJournalDate = user.lastJournalDate ? new Date(user.lastJournalDate) : null;
     if (lastJournalDate) lastJournalDate.setHours(0, 0, 0, 0);
 
+    //debug
+    console.log("today (normalise):", today);
+console.log("lastJournalDate (normalised):", lastJournalDate);
+
     let newStreak = user.streakCount || 0;
 
-    if (!lastJournalDate) {
+       if (!lastJournalDate) {
       // First ever journal
       newStreak = 1;
     } else {
       //get the difference between last journal date and currrent date 
       const dayDifference = differenceInCalendarDays(today, lastJournalDate);
+      if (newStreak === 0) {
+  newStreak = 1;
+} else
       if (dayDifference === 1) {
         newStreak += 1; // consecutive day
       } else if (dayDifference > 1) {
-        newStreak = 0; // missed day(s)
+        newStreak = 0; // missed days
       } 
     }
+
+
+    console.log("new streak:", newStreak);
+    console.log("newStreak (before save):", newStreak);
+
+
 
     user.lastJournalDate = today;
     user.streakCount = newStreak;
     await user.save();
+
+    console.log("saved to db:", {
+  streakCount: user.streakCount,
+  lastJournalDate: user.lastJournalDate
+});
 
     // Send response
     res.status(201).json({

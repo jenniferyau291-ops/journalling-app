@@ -10,6 +10,34 @@ const styles = StyleSheet.create({
     padding: 16,
   },
 
+
+  titleSetting:{
+    fontSize: 18, 
+    marginBottom: 8,
+    fontFamily:FONT
+  },
+
+  text:{
+fontSize: 16,
+    fontFamily: FONT,
+  },
+  toggle:{
+     flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20,
+    alignItems: "center",
+
+  },
+
+  warningText:{
+    fontSize: 13,
+    color: "red",
+   marginBottom: 12,
+    fontFamily:FONT
+
+  },
+
+
   
   profileHeader: {
     flexDirection: "row",
