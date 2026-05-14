@@ -10,7 +10,6 @@ describe("PATCH /api/journals/:id", () => {
   let anotherUser;
   beforeEach(async () => {
     token = await createToken();
-
     anotherUser = await createToken({
       username: "anotheruser",
       email: "another user@test.com",
@@ -56,7 +55,6 @@ describe("PATCH /api/journals/:id", () => {
 
   //test failed update journal with journal does not exist
   it("fails with journal does not exist", async () => {
-
     const res = await request(app)
       .patch(`/api/journals/${fakeId}`)
       .set("Authorization", `Bearer ${token}`)
@@ -68,13 +66,10 @@ describe("PATCH /api/journals/:id", () => {
 
   // test failed update journal not the owner 
   it("failed with not the journal owner", async () => {
-    
-
     const res = await request(app)
       .patch(`/api/journals/${journalId}`)
       .set("Authorization", `Bearer ${anotherUser}`)
       .send({ content: "not the owner" });
-
     expect(res.statusCode).toBe(403);
     expect(res.body.message).toBe("Forbidden");
   });

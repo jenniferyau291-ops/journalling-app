@@ -18,6 +18,7 @@ import COLOURS from "../../constants/colours";
 import MoodSelector from "../../components/moodSelector"; //access to the mood selector 
 import { useJournalStore } from "../../store/journalStore"; //creating journal and accessing state 
 import { useUserStore } from "../../store/userStore";
+import { useAuthStore } from "../../store/authStore";
 
 
 
@@ -34,28 +35,47 @@ const [loadingAI, setLoadingAI] = useState(false);
 
   const router = useRouter();
   const { createJournal } = useJournalStore(); 
-  const { generateAIPrompts } = useUserStore();
+  //const { generateAIPrompts } = useUserStore();
 
-  const loadPrompts = async () => {
+  
+    //const store = useUserStore.getState();
+    const { generateAIPrompts, aiPreferences } = useUserStore();
+
+const loadPrompts = async () => {
   try {
     setLoadingAI(true);
 
-    const result = await generateAIPrompts();
+    
+  //  await store.fetchUser();
 
-    setAiPrompts(result);
+    const result = await generateAIPrompts();
+    
+
+    //setAiPrompts(result);
+    //this preventing breaking if backends sends something unexpected 
+    setAiPrompts(Array.isArray(result) ? result : []);
   } catch (error) {
     console.log(error);
   } finally {
     setLoadingAI(false);
   }
-};
-
+}
 useEffect(() => {
-  loadPrompts();
-}, []);
+  if (aiPreferences?.aiPrompts) {
+    loadPrompts();
+  } else {
+    setAiPrompts([]);
+  }
+}, [aiPreferences?.aiPrompts]);
+
+//useEffect(() => {
+ // loadPrompts();
+//}, []);
 
 
   const handleSubmit = async () => {
+    console.log("TOKEN:", useAuthStore.getState().token);
+console.log("SUBMIT FIRED");
   if (!title || !content) {
     Alert.alert("Error", "Please fill in all fields");
     return;
@@ -92,8 +112,13 @@ useEffect(() => {
   behavior={Platform.OS === "ios" ? "padding" : undefined}
 >
       <ScrollView contentContainerStyle={styles.container} style={styles.scrollViewStyle}>
+       { /* HEADER */}
+          <View style={styles.header}>
+             <Text style={styles.headerTitle}>Journal App</Text>
+              <Text style={styles.headerSubtitle}>Reflect. Write. Grow</Text>
+              </View>
         <View style={styles.card}>
-          {/* HEADER */}
+        
           <View style={styles.header}>
             <Text style={styles.title}> Add Your Journal Entry</Text>
             <Text style={styles.subtitle}>Share your thoughts</Text>
@@ -102,7 +127,7 @@ useEffect(() => {
           <View style={styles.formContainer}>
               {loadingAI && <Text>Loading AI prompts...</Text>}
 
-{!loadingAI && aiPrompts.length > 0 (
+{!loadingAI && aiPrompts.length > 0 &&(
   <View style={styles.formGroup}>
     <Text style={styles.label}>
       AI journalling ideas

@@ -10,12 +10,12 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: COLOURS.background,
     padding: 20,
-     justifyContent: "flex-start", // aligns to top
+    justifyContent: "flex-start", // aligns to top
     borderWidth: 1,
     borderColor: COLOURS.outline, 
   },
   
-   appTitle: {
+  appTitle: {
   fontSize: 27,
   fontWeight: "700",
   lineHeight:34,

@@ -29,9 +29,6 @@ describe("POST /api/auth/login", () => {
     expect(res.body.user.id).toBeDefined();
   });
 
-
-
-
   //testing login route with wrong password 
   test("should fail with wrong password", async () => {
     await request(app).post("/api/auth/register").send({

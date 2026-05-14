@@ -23,22 +23,35 @@ describe("PATCH /api/users/preferences", () => {
         aiSummary: true,
         aiPrompts: true,
       });
-
-    expect(res.status).toBe(200);
-    expect(res.body.aiPreferences.aiSummary).toBe(true);
-    expect(res.body.aiPreferences.aiPrompts).toBe(true);
+      expect(res.status).toBe(200);
+      expect(res.body.aiPreferences.aiSummary).toBe(true);
+      expect(res.body.aiPreferences.aiPrompts).toBe(true);
   });
 
   // invalid not boolean eg summary as a number
-  it("not bboolean ", async () => {
+  it("should return 400 when not boolean ", async () => {
     const res = await request(app)
       .patch("/api/users/preferences")
       .set("Authorization", `Bearer ${token}`)
       .send({
         aiSummary: 4,
       });
+  
 
     expect(res.status).toBe(400);
     expect(res.body.message).toBe("ai Summary must be a true or false");
   });
+
+  //partial test updating only one part 
+  it("should update only aiSummary when other part missing", async () => {
+  const res = await request(app)
+    .patch("/api/users/preferences")
+    .set("Authorization", `Bearer ${token}`)
+    .send({
+      aiSummary: true,
+    });
+
+  expect(res.status).toBe(200);
+  expect(res.body.aiPreferences.aiSummary).toBe(true);
+});
 });

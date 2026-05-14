@@ -26,8 +26,6 @@ const dataForChart = (moods, selectedMonth) => {
     (entry) => entry.dailymoodByMonth || []
   );
   
-
-
   //get all the mood reported on each day into an arrary
 
   const allMoods = days.flatMap((d) =>

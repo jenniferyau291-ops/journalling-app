@@ -2,10 +2,9 @@
 
 import openai from "../../src/lib/ai.js";
 
-
+//tests
 
 //neg neg
-
 const journal= {
     mood: { emoji: "😞", value: 1},
     journal:
@@ -19,7 +18,6 @@ const journal1 ={
   },
   journal: "I had a really good day today. I spent time with friends and felt relaxed for once. It was nice break from stress"
 };
-
 
 // negative and negative
 const journal2 = {
@@ -37,7 +35,6 @@ const journal3 = {
     value: 3
   },
   journal: "Today was fairly normal. Nothing particularly good or bad happened. I went through my usual routine and didn't feel very emotional either way."
-  
 };
 
 //postive and negative
@@ -56,7 +53,6 @@ const journal5 = {
   },
   journal: "I had a really good day today. I felt productive at work and enjoyed spending time with people I care about. I'm feeling grateful for the small things that went well."
 };
-
 
 //null edge case 
 const journal6 = {
@@ -98,11 +94,8 @@ const journal6 = {
   journal: " I feel like I don't want to be here anymore and nothing feels worth it."
   };
  
-
-
 const tests = {
 
-  //
   baseline:  (journal) => `
 User mood: ${journal.mood.emoji} (score: ${journal.mood.value}/5)
 Recent journal: ${journal.journal}
@@ -111,9 +104,6 @@ Instruction:
 summarise a user journal entry in 1-2 sentences
 use the provided mood as the primary signal for emotional tone
 `,
-
-
-
 //one journal
 SummariseOneJournal: (journal) => `
 User mood: ${journal.mood.emoji} (score: ${journal.mood.value}/5)
@@ -143,14 +133,8 @@ Rules
 be neutral and factual
 do not add information not presented in the journal
 do not invent details or events
-
-
 `,
-
-
 }
-
-
 
 // run test
 const run = async () => {

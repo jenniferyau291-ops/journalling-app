@@ -39,9 +39,9 @@ export default function Login() {
   return (
     <KeyboardAvoidingView
   style={{ flex: 1 }}
-  behavior="height" 
-  >
-    <View style={styles.container}>
+  behavior="height"
+>
+  <View style={styles.container}>
       {/* ILLUSTRATION */}
       <View style={styles.topIllustration}>
   <Image

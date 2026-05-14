@@ -13,19 +13,19 @@ export default function Home() {
   const router = useRouter();
   const { journals, loading, refreshing, page, hasMore, fetchJournals } = useJournalStore();
  const streakCount = useUserStore((state) => state.streakCount);
-const getStreaks = useUserStore((state) => state.getStreaks); 
+const fetchUser = useUserStore((state) => state.fetchUser); 
 //degub
 console.log("ui:", streakCount);
 
-useFocusEffect(
-  useCallback(() => {
-    getStreaks();
-  }, [])
-);
+//useFocusEffect(
+ // useCallback(() => {
+  //  getStreaks();
+  //}, [])
+//);
 
- // useEffect(() => {
- // getStreaks(); // fetch streak from backend
- // }, [getStreaks]);
+ useEffect(() => {
+ fetchUser(); // fetch streak from backend
+  }, []);
 
   useEffect(() => {
     fetchJournals(); //fetch journals from backend

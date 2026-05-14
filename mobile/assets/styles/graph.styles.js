@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
   flex:1,
 },
 
-
   header: {
     marginBottom: 16,
     alignItems: "center",

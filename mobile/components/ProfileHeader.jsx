@@ -3,6 +3,7 @@ import { useAuthStore } from "../store/authStore";
 import styles from "../assets/styles/profile.style";
 import { formatMemberSince } from "../lib/utils";
 
+//profile header to show users information
 export default function ProfileHeader() {
   const { user } = useAuthStore();
   console.log("user in profile:", user);

@@ -13,7 +13,7 @@ export const createJournal = async (req, res) => {
   try {
     const { title, content, mood } = req.body;
     //debug
-  console.log("create journal hit:", new Date().toISOString());
+  //console.log("create journal hit:", new Date().toISOString());
 
     // Validation
     if (!title || !title.trim()) {
@@ -32,10 +32,10 @@ export const createJournal = async (req, res) => {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 //debug
-    console.log("debug start");
-console.log("user:", user._id);
-console.log("lastJournalDate:", user.lastJournalDate);
-console.log("streakCount (before):", user.streakCount);
+   // console.log("debug start");
+//console.log("user:", user._id);
+//console.log("lastJournalDate:", user.lastJournalDate);
+//console.log("streakCount (before):", user.streakCount);
 
 
 
@@ -71,8 +71,8 @@ console.log("streakCount (before):", user.streakCount);
     if (lastJournalDate) lastJournalDate.setHours(0, 0, 0, 0);
 
     //debug
-    console.log("today (normalise):", today);
-console.log("lastJournalDate (normalised):", lastJournalDate);
+  //  console.log("today (normalise):", today);
+//console.log("lastJournalDate (normalised):", lastJournalDate);
 
     let newStreak = user.streakCount || 0;
 

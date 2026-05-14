@@ -15,44 +15,29 @@ const getRandomItem = (themes) =>
 
 const randomTheme = getRandomItem(themes);
 
-
-
 const tests = {
 
   // basic  test - check if it works 
   basic: "Generate 3 journalling prompts for user",
 
   //tests for the length of prompts 
-
   short: "Generate 3 short journalling prompts for user. Keep each 1-2 sentences.",
-
-
   long: "Generate 3 detailed journalling prompts for user. Each should be 4-6 sentences.",
 
   //tone 
-
   reflective: "Generate 3 short journalling prompts for user. Keep each 1-2 sentences. Make it in a reflective tone",
-
   motivational: "Generate 3 short journalling prompts for user. Keep each 1-2 sentences. Make it in a motivational tone",
-
-  //combine both tone
-
-reflectiveAndMotivation : "Generate 3 short journalling prompts for user. Keep each 1-2 sentences. Make it in a reflective tone, where it is appropraite add a postive and encouraging comment",
-
+  reflectiveAndMotivation : "Generate 3 short journalling prompts for user. Keep each 1-2 sentences. Make it in a reflective tone, where it is appropraite add a postive and encouraging comment",
   professional: "Generate 3 short journalling prompts for user. Keep each 1-2 sentences. Make it in a reflective tone, where it is appropraite add a postive and encouraging comment. Make it more professional tone",
-
   friendly: "Generate 3 short journalling prompts for user. Keep each 1-2 sentences. Make it in a friendly and fun reflective tone, where it is appropraite add a postive and encouraging comment",
 
-//layout of the prompts
+//maaking sure no repeat of themes
 noRepeat: "Generate 3 short journalling prompts for user. Keep each 1-2 sentences. Make it in a friendly and fun reflective tone, where it is appropraite add a postive and encouraging comment. no repeat of prompts",
+noRepeatFix: "Generate 3 short journalling prompts for user. Requirements: Each prompt must be 1–2 sentences,  friendly, fun, reflective tone, Add positive and encouraging comments where appropriate. Structure: Emotional reflection, Scenario-based, Future-oriented Rules: Do not repeat ideas, themes, or sentence structures. Each prompt must be clearly different in focus.",
 
-//noRepeatFix: "Generate 3 short journalling prompts for user. Keep each 1-2 sentences. Make it in a friendly and fun reflective tone, where it is appropraite add a postive and encouraging comment Each prompt should have different theme and do not resut them"
-
-//noRepeatFix: "Generate 3 short journalling prompts for user. Requirements: Each prompt must be 1–2 sentences,  friendly, fun, reflective tone, Add positive and encouraging comments where appropriate. Structure: Emotional reflection, Scenario-based, Future-oriented Rules: Do not repeat ideas, themes, or sentence structures. Each prompt must be clearly different in focus."
-
+//adding random theme and writing styles
 addingThemes: (theme) => `Generate 3 short journalling prompts for a user. Requirements: Each prompt must be 1-2 sentences, friendly, fun, reflective tone. Add positive and encouraging comments where appropriate. Structure: Emotional reflection, Scenario-based, Future-oriented. Rules: Do not repeat ideas, themes, or sentence structures. Each prompt must be clearly different in focus. Theme to use: ${theme}`,
 addingThemesandwrtingStyles: (theme) => `Generate 3 short journalling prompts for a user. Requirements: Each prompt must be 1-2 sentences, friendly, fun, reflective tone. Add positive and encouraging comments where appropriate. Structure: Emotional reflection, Scenario-based, Future-oriented. Do vary the writing styles Rules: Do not repeat ideas, themes, or sentence structures. Do not always start with same pattern  Each prompt must be clearly different in focus. Theme to use: ${theme}`,
-
 nostructure:  (theme) => `Generate 3 short journalling prompts for a user. Requirements: Each prompt must be 1-2 sentences, friendly, fun, reflective tone. Add positive and encouraging comments where appropriate Do vary the writing styles. Rules: Do not repeat ideas, themes, or sentence structures. Do not always start with same pattern  Each prompt must be clearly different in focus. Theme to use: ${theme}`,
 
 //adding journal and mood to see what output 
@@ -63,14 +48,18 @@ Recent journal: ${user.journal}
 Use the user's mood and recent journal as context to guide the tone and focus of the prompts. Requirements: Each prompt must be 1-2 sentences, friendly, fun, reflective tone. Add positive and encouraging comments where appropriate Do vary the writing styles. 
 Rules: Do not repeat ideas, themes, or sentence structures. Do not always start with same pattern  Each prompt must be clearly different in focus. Theme to use: ${theme}`,
 
-
-//prompt should be relevant to journal
-addedJournalandMoodfixed: (theme, user) => `
+addedJournalandMoodagain:  (theme, user) => `
 Generate 3 short journalling prompts for a user.
-
 User mood: ${user.mood.emoji} (score: ${user.mood.value}/5)
 Recent journal: ${user.journal}
+Use the user's mood and recent journal as context to guide the tone and focus of the prompts. Requirements: Each prompt must be 1-2 sentences, friendly, fun, reflective tone. Add positive and encouraging comments where appropriate Do vary the writing styles. 
+Rules: Do not repeat ideas, themes, or sentence structures. Do not always start with same pattern  Each prompt must be clearly different in focus. Theme to use: ${theme}`,
 
+//making sure prompts relevant to journal and mood
+addedJournalandMoodfixed: (theme, user) => `
+Generate 3 short journalling prompts for a user.
+User mood: ${user.mood.emoji} (score: ${user.mood.value}/5)
+Recent journal: ${user.journal}
 Instruction:
 Base all prompts primarily on the user's recent journal. The prompts should reflect or relate to what the user wrote.
 
@@ -89,16 +78,7 @@ Do not repeat ideas, themes, or sentence structures
 Do not always start with the same pattern
 Each prompt must be clearly different in focus
 `,
-
-//take account of no mood and journal 
-addedJournalandMoodagain:  (theme, user) => `
-Generate 3 short journalling prompts for a user.
-User mood: ${user.mood.emoji} (score: ${user.mood.value}/5)
-Recent journal: ${user.journal}
-Use the user's mood and recent journal as context to guide the tone and focus of the prompts. Requirements: Each prompt must be 1-2 sentences, friendly, fun, reflective tone. Add positive and encouraging comments where appropriate Do vary the writing styles. 
-Rules: Do not repeat ideas, themes, or sentence structures. Do not always start with same pattern  Each prompt must be clearly different in focus. Theme to use: ${theme}`,
-
-//prompt should be relevant to journal
+//taking in account missing mood 
 noMoodandJournal: (theme, user) => `
 Generate 3 short journalling prompts for a user.
 
@@ -126,10 +106,7 @@ Do not always start with the same pattern
 Each prompt must be clearly different in focus
 `,
 
-
-
-//testing no mood and journal 
-
+//handle missing data
 noMoodandJournaldata: (theme, user = {}) => {
   const mood = user?.mood;
   const journal = user?.journal;
@@ -140,7 +117,6 @@ Generate 3 short journalling prompts for a user.
 User mood: ${
   mood ? `${mood.emoji} (score: ${mood.value}/5)` : "Not provided"
 }
-
 Recent journal: ${journal || "Not provided"}
 
 Instruction:
@@ -166,7 +142,6 @@ Each prompt must be clearly different in focus
 },
 
 //adding constraints for non-writing activites and mutiple moods and journals
-
 multiple: (theme, user = {}) => {
   const mood = user?.mood;
   const journal = user?.journal;
@@ -190,8 +165,6 @@ if (journal) {
 } else {
   journalEntry = "Not provided";
 }
-
-
   return `
 Generate 3 short journalling prompts for a user.
 
@@ -226,8 +199,7 @@ Do not suggest drawing, doodling, or any physical or external activities
 
 `;
 },
- // dates
-
+ // take account of dates
 multipleDates: (theme, user = {}) => {
   const mood = user?.mood;
   const journal = user?.journal;
@@ -251,8 +223,6 @@ if (journal) {
 } else {
   journalEntry = "Not provided";
 }
-
-
   return `
 Generate 3 short journalling prompts for a user.
 
@@ -264,7 +234,6 @@ Instruction:
 Base all prompts primarily on the user's recent journal entries. The prompts should reflect or relate to what the user wrote.
 the user may provide multiple mood entries and multiple journals entries. 
 Treat the dates as the timeline of when each journal entry occurred and use them to interpret emotional changes over time.
-
 
 Use all mood entries collectively to determine emotional tone.
 Use the user's mood to guide emotional tone:
@@ -288,7 +257,6 @@ Do not suggest drawing, doodling, or any physical or external activities
 `;
 },
 // dates constraints
-
 multipleDatesConstraints: (theme, user = {}) => {
   const mood = user?.mood;
   const journal = user?.journal;
@@ -335,7 +303,6 @@ Do not repeat ideas, themes, or sentence structures
 Do not always start with the same pattern
 Each prompt must be clearly different in focus
 Do not suggest drawing, doodling, or any physical or external activities
-
 `;
 }
 };
@@ -493,11 +460,6 @@ const mockUser17 = {
   { text: "Yesterday Things got a bit overwhelming later on.", date: "2026-05-03" }
 ]
 };
-
-
-
-
-
 
 const run = async () => {
   try {

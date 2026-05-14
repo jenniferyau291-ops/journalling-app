@@ -11,7 +11,7 @@ export const useAuthStore = create((set) => ({
   isCheckingAuth: true,
 
 
-  //register sends information to create account 
+  //post request register sends information to create account 
 
   register: async (username, email, password) => {
     set({ isLoading: true });
@@ -46,7 +46,7 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  //login sends information to server 
+  //login send information post request
   login: async (email, password) => {
     set({ isLoading: true });
 

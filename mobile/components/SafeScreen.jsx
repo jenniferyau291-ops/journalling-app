@@ -2,6 +2,7 @@ import { View, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import COLOURS from "../constants/colours";
 
+//protective wrapper
 export default function SafeScreen({ children }) {
   const insets = useSafeAreaInsets();
 

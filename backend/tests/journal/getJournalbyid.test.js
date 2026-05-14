@@ -13,8 +13,6 @@ describe("GET /api/journals/:id", () => {
 
   beforeEach(async () => {
     token = await createToken();
-
-
     anotherUser = await createToken({
       username: "anotheruser",
       email: "another@test.com",
@@ -29,8 +27,6 @@ describe("GET /api/journals/:id", () => {
   content: "My journal",
   mood: { emoji: "🙂", value: 4 },
 });
-
-
     journalId = res.body.journal._id;
   });
 
@@ -49,14 +45,11 @@ expect(res.body.journal.mood.value).toBe(4);
 expect(res.body.journal.user._id).toBeDefined();
   });
 
-
-
   // test failed get journal when does not exist 
   it("failed to get journal when does not exist", async () => {
     const res = await request(app)
       .get(`/api/journals/${fakeInvalidId}`)
       .set("Authorization", `Bearer ${token}`);
-
     expect(res.statusCode).toBe(404);
     expect(res.body.message).toBe("Journal not found");
   });
