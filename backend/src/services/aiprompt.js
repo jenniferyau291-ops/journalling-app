@@ -16,7 +16,7 @@ import Journal from "../models/Journal.js"
 
   //send prompt to ai 
   const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "gpt-4.1",
     messages: [
       { role: "user", content: prompt }
     ],
