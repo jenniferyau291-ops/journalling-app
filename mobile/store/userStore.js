@@ -13,9 +13,12 @@ export const useUserStore = create((set, get) => ({
   },
   
 
-  getStreaks: async () => {
+  fetchUser: async () => {
     //get token from logged user
   const { token } = useAuthStore.getState();
+  if (!token) {
+  throw new Error("User not authenticated");
+}
 
   try {
     //make get request 
@@ -30,10 +33,10 @@ export const useUserStore = create((set, get) => ({
     console.log("backend:", data.streakCount);
     if (!res.ok) throw new Error(data.message || "Failed to fetch user");
 
-    set({streakCount: data.streakCount});
+    set({streakCount: data.streakCount,
+     aiPreferences: data.aiPreferences,
 
-
-
+  })
   } catch (error) {
     console.log("Get user error:", error);
     throw error;
@@ -42,9 +45,12 @@ export const useUserStore = create((set, get) => ({
 
 
 
-//user preference 
+//user preference patch request
 updatePreferences: async (updates) => {
     const { token } = useAuthStore.getState();
+    if (!token) {
+  throw new Error("User not authenticated");
+}
 
     try {
       const res = await fetch(`${API_URL}/users/preferences`, {
@@ -61,12 +67,13 @@ updatePreferences: async (updates) => {
 
       // update
       set({
-  aiPreferences: {
-    aiSummary: data.aiPreferences.aiSummary,
-    aiPrompts: data.aiPreferences.aiPrompts,
-  },
-});
+ aiPreferences: {
+  aiSummary: data.aiPreferences.aiSummary,
+  aiPrompts: data.aiPreferences.aiPrompts,
+ },
+    });
 
+  await get().fetchUser();
     } catch (error) {
       console.log("Update preferences error:", error);
       throw error;
@@ -74,11 +81,16 @@ updatePreferences: async (updates) => {
   },
 
 
-
+//post request 
 
  generateAIPrompts: async () => {
+
   const { token } = useAuthStore.getState();
 
+  if (!token) {
+  throw new Error("User not authenticated");
+}
+  
   const res = await fetch(`${API_URL}/ai/aiGenerate`, {
     method: "POST",
     headers: {
@@ -99,7 +111,12 @@ updatePreferences: async (updates) => {
     throw new Error("Backend did not return anything");
   }
 
-  if (!res.ok) throw new Error(data.error);
+  if (!res.ok) {return {
+        success: false,
+        data: [],
+        error: "Request failed",
+      };
+    }
 
   return data.description;
 },

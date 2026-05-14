@@ -8,12 +8,12 @@ export const aiGenerate = async (req, res) => {
   try {
 
     //debug
-    console.log("in controller");
-  console.log("middleware:", req.user);
+ //   console.log("in controller");
+ // console.log("middleware:", req.user);
 
      const userId = req.user._id;
      //debug
-     console.log("getting user:", userId);
+   //  console.log("getting user:", userId);
 
      //find the user
 
@@ -38,7 +38,7 @@ export const aiGenerate = async (req, res) => {
       });
     }
 
-    console.log("about to call aiGenerator");
+   // console.log("about to call aiGenerator");
 
     // pass the user and call aiGenerator and get results
     const result = await aiGenerator(userId);
@@ -50,7 +50,7 @@ export const aiGenerate = async (req, res) => {
       content: result
     });
     //debug 
-    console.log("result in controller", result);
+ //   console.log("result in controller", result);
     //display results 
     const prompts = result.split("\n");
 

@@ -7,8 +7,6 @@ import openai from "../lib/ai.js"
 export const aiSummaryGenerator = async (journal) => {
   if (!journal) return null;
 
-
-
   try {
     //call the method and send the journal and get the prompt 
     const prompt = summariseJournal(journal);

@@ -1,7 +1,7 @@
 // styles/create.styles.js
 import { StyleSheet, Platform } from "react-native";
 import COLOURS from "../../constants/colours";
-import { FONT} from "../../constants/typography";
+import { FONT, FONT_TITLE } from "../../constants/typography";
 
 const styles = StyleSheet.create({
   container: {
@@ -17,7 +17,21 @@ const styles = StyleSheet.create({
     backgroundColor: COLOURS.background,
   },
 
+ headerTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: COLOURS.primary,
+    fontStyle: "italic",
+    fontFamily: FONT_TITLE,
+    marginBottom: 4,
+  },
 
+  headerSubtitle: {
+    fontSize: 14,
+    color: COLOURS.textSecondary,
+    textAlign: "center",
+    fontFamily: FONT
+  },
   card: {
     backgroundColor: COLOURS.cardBackground,
     borderRadius: 12,
@@ -46,7 +60,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "700",
     color: COLOURS.textPrimary,
     marginBottom: 8,
@@ -101,7 +115,6 @@ const styles = StyleSheet.create({
   marginBottom: 28, // adds vertical spacing between input sections
 },
 
-
   inputIcon: {
     marginRight: 10,
     color: COLOURS.textSecondary,
@@ -137,17 +150,12 @@ moodButton: {
   padding: 6,
 },
 
-
-  
-
   placeholderContainer: {
     width: "100%",
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
-
-
 
   button: {
     backgroundColor: COLOURS.primary,
@@ -181,7 +189,6 @@ moodButton: {
     marginRight: 8,
   },
 
-  
 });
 
 export default styles;

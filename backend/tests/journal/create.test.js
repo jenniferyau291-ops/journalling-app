@@ -7,8 +7,6 @@ import User from "../../src/models/User.js";
 describe("POST /api/journals", () => {
  let token;
 let userId;
-
-
 // get the user id and token 
 beforeEach(async () => {
   const testUser = await createUserAndToken();
@@ -35,7 +33,6 @@ beforeEach(async () => {
     expect(res.body.journal.mood.value).toBe(4);
   });
 
-
   //test empty content 
   it("fails to crease journal with empty content", async () => {
     const res = await request(app)
@@ -46,7 +43,6 @@ beforeEach(async () => {
         content: "",
         mood: { emoji: "🙂", value: 4 },
       });
-
     expect(res.statusCode).toBe(400);
     expect(res.body.message).toBe("Journal content is required");
   });
@@ -66,8 +62,10 @@ beforeEach(async () => {
     expect(res.body.message).toBe("Invalid mood data");
   });
 
+
  // test streak 
 
+ //test first journal streaks should be 1 
   it("sets streak to 1 on first journal", async () => {
     const res = await request(app)
       .post("/api/journals")

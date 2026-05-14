@@ -23,11 +23,9 @@ describe("POST /api/journals - AI summary", () => {
   //test for ai summary when turned on 
   it("testing ai summary when turned on ", async () => {
     const user = await User.findById(userId);
-
+    //set summary as true 
     user.aiPreferences.aiSummary = true;
-    
     await user.save();
-
     const res = await request(app)
       .post("/api/journals")
       .set("Authorization", `Bearer ${token}`)
@@ -41,14 +39,10 @@ describe("POST /api/journals - AI summary", () => {
     expect(res.body.journal.summary).toBe("mock");
   });
 
-
-
   // test ai summaer when not turned on - should be underdefined as skipped
   it("testing ai summary when turned off ", async () => {
     const user = await User.findById(userId);
-
     user.aiPreferences.aiSummary = false;
-    
     await user.save();
 
     const res = await request(app)
@@ -59,7 +53,7 @@ describe("POST /api/journals - AI summary", () => {
         content: "good",
         mood: { emoji: "🙂", value: 5 },
       });
-
+      //still created the journal
     expect(res.statusCode).toBe(201);
     expect(res.body.journal.summary).toBeUndefined();
 
@@ -91,11 +85,10 @@ describe("POST /api/journals - AI summary", () => {
 
   it("testing AI failure", async () => {
    const user = await User.findById(userId);
-
     user.aiPreferences.aiSummary = true;
-    
     await user.save();
 
+    //mock error message
     aiSummaryGenerator.mockRejectedValue(new Error("AI failed"));
 
   const res = await request(app)

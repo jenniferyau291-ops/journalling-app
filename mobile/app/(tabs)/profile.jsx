@@ -11,6 +11,11 @@ const { aiSummary, aiPrompts } = aiPreferences;
 
  return (
     <View style={styles.container}>
+
+      <View style={styles.header}>
+            <Text style={styles.headerTitle}>Journal App</Text>
+            <Text style={styles.headerSubtitle}>Reflect. Write. Grow</Text>
+            </View>
       <ProfileHeader />
 
       <View>

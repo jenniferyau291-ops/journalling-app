@@ -42,8 +42,6 @@ describe("POST /api/auth/register", () => {
   });
 });
 
-
-
 //test resgister route with same username
 test("should fail with username already exists", async () => {
     await request(app).post("/api/auth/register").send({

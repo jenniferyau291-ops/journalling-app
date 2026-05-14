@@ -1,7 +1,7 @@
 // styles/profile.styles.js
 import { StyleSheet } from "react-native";
 import COLOURS from "../../constants/colours";
-import { FONT } from "../../constants/typography";
+import { FONT, FONT_TITLE } from "../../constants/typography";
 
 const styles = StyleSheet.create({
   container: {
@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLOURS.background,
     padding: 16,
   },
-
 
   titleSetting:{
     fontSize: 18, 
@@ -21,6 +20,7 @@ const styles = StyleSheet.create({
 fontSize: 16,
     fontFamily: FONT,
   },
+
   toggle:{
      flexDirection: "row",
     justifyContent: "space-between",
@@ -36,8 +36,25 @@ fontSize: 16,
     fontFamily:FONT
 
   },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: COLOURS.primary,
+    fontStyle: "italic",
+    fontFamily: FONT_TITLE,
+    marginBottom: 4,
+  },
 
-
+  headerSubtitle: {
+    fontSize: 14,
+    color: COLOURS.textSecondary,
+    textAlign: "center",
+    fontFamily: FONT
+  },
+   header: {
+    marginBottom: 16,
+    alignItems: "center",
+  },
   
   profileHeader: {
     flexDirection: "row",
@@ -93,8 +110,7 @@ fontSize: 16,
     marginLeft: 8,
      fontFamily: FONT,
   },
-
-
+  
 });
 
 export default styles;

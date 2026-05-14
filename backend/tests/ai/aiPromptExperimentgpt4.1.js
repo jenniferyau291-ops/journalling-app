@@ -11,14 +11,14 @@ const themes = [
   "gratitues",
   "challenges"
 ];
+//randomise to get random theme
 const getRandomItem = (themes) =>
+  //randon number x the length and then round down for index 
   themes[Math.floor(Math.random() * themes.length)];
 
 const randomTheme = getRandomItem(themes);
 
-
-
-
+//tests
 const mockUser1 = {
   mood:{ emoji:"😄",
     value:5
@@ -88,18 +88,19 @@ const mockUser17 = {
 
 const tests = {
 multipleDatesConstraints: (theme, user = {}) => {
+  //if user exist get the values
   const mood = user?.mood;
   const journal = user?.journal;
-
+//check if its array if not wrap it in array
   const moodArray = Array.isArray(mood) ? mood : mood ? [mood] : [];
 const journalArray = Array.isArray(journal) ? journal : journal ? [journal] : [];
 
 let moodEntry ="";
-
+//go through loop to get each mood
 if (moodArray.length > 0) {
       for (let i = 0; i < moodArray.length; i++) {
         const m = moodArray[i];
-
+        //check date and mood
         moodEntry += m.date
           ? `(${m.date}) ${m.emoji} (score: ${m.value}/5)\n`
           : `${m.emoji} (score: ${m.value}/5)\n`;
@@ -107,13 +108,12 @@ if (moodArray.length > 0) {
     } else {
       moodEntry = "Not provided";
     }
-
     let journalEntry = "";
-
+    //go through loop to get all journals
     if (journalArray.length > 0) {
       for (let i = 0; i < journalArray.length; i++) {
         const j = journalArray[i];
-
+        //get date and journal
         journalEntry += j.date
           ? `(${j.date}) ${j.text || j}\n`
           : `${j.text || j}\n`;

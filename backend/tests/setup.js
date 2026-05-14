@@ -3,9 +3,7 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 
 process.env.JWT_SECRET = "testsecret";
 
-
 let mongo;
-
 
 //before each test - creates temp in memory mongodb and connecting to mongoose
 beforeAll(async () => {

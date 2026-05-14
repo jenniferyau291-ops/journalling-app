@@ -4,6 +4,8 @@ import styles from "../assets/styles/profile.style";
 import { Ionicons } from "@expo/vector-icons";
 import COLOURS from "../constants/colours";
 
+//log out button fuction
+
 export default function LogoutButton() {
   const { logout } = useAuthStore();
 

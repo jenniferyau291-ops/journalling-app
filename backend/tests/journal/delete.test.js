@@ -7,9 +7,7 @@ describe("DELETE /api/journals/:id", () => {
   let token;
   let journalId;
   let anotherUser;
-
   // get token
-
   beforeEach(async () => {
     token = await createToken();
      anotherUser = await createToken({
@@ -57,7 +55,6 @@ describe("DELETE /api/journals/:id", () => {
     const res = await request(app)
       .delete(`/api/journals/${journalId}`)
       .set("Authorization", `Bearer ${anotherUser}`);
-
     expect(res.statusCode).toBe(403);
     expect(res.body.message).toBe("Forbidden");
   });
