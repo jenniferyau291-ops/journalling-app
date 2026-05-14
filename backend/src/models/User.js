@@ -8,8 +8,18 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true, minlength: 6 },
     streakCount: { type: Number, default: 0 },
     lastJournalDate: { type: Date },
-  },
-  { timestamps: true }
+   aiPreferences: {
+    aiSummary: {
+      type: Boolean,
+      default: false
+    },
+    aiPrompts: {
+      type: Boolean,
+      default: false
+    }
+  }
+},
+{ timestamps: true }
 );
 
 // hash password before saving user to db

@@ -13,6 +13,7 @@ export const createUserAndToken = async () => {
       username: `user${Date.now()}`,
       email: `user${Date.now()}@test.com`,
       password: "password123",
+      
     });
      
 
@@ -32,6 +33,7 @@ export const createToken = async () => {
       username: `user${Date.now()}`,
       email: `user${Date.now()}@test.com`,
       password: "password123",
+
     });
 
   return res.body.token;

@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { View, Text, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Loader from "../../components/loader";
 import { useRouter } from "expo-router";
 import styles from "../../assets/styles/home.styles";
 import COLOURS from "../../constants/colours";
-
+import { useFocusEffect } from "@react-navigation/native";
 import { useJournalStore } from "../../store/journalStore"; // access journal data 
 import { useUserStore } from "../../store/userStore"; //access user data 
 
@@ -14,10 +14,18 @@ export default function Home() {
   const { journals, loading, refreshing, page, hasMore, fetchJournals } = useJournalStore();
  const streakCount = useUserStore((state) => state.streakCount);
 const getStreaks = useUserStore((state) => state.getStreaks); 
+//degub
+console.log("ui:", streakCount);
 
-  useEffect(() => {
-  getStreaks(); // fetch streak from backend
-  }, [getStreaks]);
+useFocusEffect(
+  useCallback(() => {
+    getStreaks();
+  }, [])
+);
+
+ // useEffect(() => {
+ // getStreaks(); // fetch streak from backend
+ // }, [getStreaks]);
 
   useEffect(() => {
     fetchJournals(); //fetch journals from backend
